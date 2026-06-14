@@ -103,6 +103,19 @@ export async function POST(request: NextRequest) {
       Boolean(msgSignature && encryptField) &&
       isValidEncodingAesKey(config.encodingAesKey);
 
+    console.info("[wechat POST] received", {
+      hasEncrypt: Boolean(encryptField),
+      useEncryption,
+      bodyLength: rawBody.length,
+    });
+
+    if (encryptField && !useEncryption) {
+      console.error(
+        "[wechat POST] encrypted body but WECHAT_ENCODING_AES_KEY missing or invalid (must be 43 chars)",
+      );
+      return textResponse("encryption not configured", 403);
+    }
+
     let messageXml = rawBody;
 
     if (useEncryption && config.encodingAesKey) {
@@ -128,6 +141,12 @@ export async function POST(request: NextRequest) {
     }
 
     const message = parseIncomingXml(messageXml);
+    console.info("[wechat POST] message", {
+      msgType: message.MsgType,
+      event: message.Event,
+      fromUser: message.FromUserName?.slice(0, 8),
+    });
+
     const reply = await handleMessage(message);
     const replyXml = buildReplyXml(message, reply);
 
