@@ -8,6 +8,12 @@ function requireEnv(name: string): string {
   return value;
 }
 
+export function isValidEncodingAesKey(key?: string): boolean {
+  const trimmed = key?.trim();
+  // 微信 EncodingAESKey 固定 43 位
+  return Boolean(trimmed && trimmed.length === 43);
+}
+
 export function getWechatConfig(): WechatConfig {
   return {
     token: requireEnv("WECHAT_TOKEN"),
@@ -18,5 +24,5 @@ export function getWechatConfig(): WechatConfig {
 }
 
 export function isEncryptionEnabled(config: WechatConfig): boolean {
-  return Boolean(config.encodingAesKey);
+  return isValidEncodingAesKey(config.encodingAesKey);
 }

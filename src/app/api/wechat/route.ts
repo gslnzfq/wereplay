@@ -1,6 +1,6 @@
 import { randomBytes } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { getWechatConfig, isEncryptionEnabled } from "@/lib/wechat/config";
+import { getWechatConfig, isValidEncodingAesKey } from "@/lib/wechat/config";
 import {
   decryptMessage,
   encryptMessage,
@@ -52,9 +52,12 @@ export async function GET(request: NextRequest) {
     const config = getWechatConfig();
     const { signature, timestamp, nonce, echostr, msgSignature } =
       getQueryParams(request);
-    const encrypted = isEncryptionEnabled(config);
+    // 根据微信实际请求判断：有 msg_signature 才走加密模式
+    const useEncryption =
+      Boolean(msgSignature) &&
+      isValidEncodingAesKey(config.encodingAesKey);
 
-    if (encrypted && config.encodingAesKey) {
+    if (useEncryption && config.encodingAesKey) {
       if (
         !verifyMsgSignature(
           config.token,
@@ -94,23 +97,21 @@ export async function POST(request: NextRequest) {
     const config = getWechatConfig();
     const { signature, timestamp, nonce, msgSignature } =
       getQueryParams(request);
-    const encrypted = isEncryptionEnabled(config);
     const rawBody = await request.text();
+    const encryptField = extractEncryptField(rawBody);
+    const useEncryption =
+      Boolean(msgSignature && encryptField) &&
+      isValidEncodingAesKey(config.encodingAesKey);
 
     let messageXml = rawBody;
 
-    if (encrypted && config.encodingAesKey) {
-      const encryptField = extractEncryptField(rawBody);
-      if (!encryptField) {
-        return textResponse("Missing Encrypt field", 400);
-      }
-
+    if (useEncryption && config.encodingAesKey) {
       if (
         !verifyMsgSignature(
           config.token,
           timestamp,
           nonce,
-          encryptField,
+          encryptField!,
           msgSignature,
         )
       ) {
@@ -120,7 +121,7 @@ export async function POST(request: NextRequest) {
       messageXml = decryptMessage(
         config.encodingAesKey,
         config.appId,
-        encryptField,
+        encryptField!,
       );
     } else if (!verifySignature(config.token, timestamp, nonce, signature)) {
       return textResponse("Invalid signature", 403);
@@ -134,7 +135,7 @@ export async function POST(request: NextRequest) {
       return textResponse("success");
     }
 
-    if (encrypted && config.encodingAesKey) {
+    if (useEncryption && config.encodingAesKey) {
       const responseNonce = randomBytes(8).toString("hex");
       const responseTimestamp = Math.floor(Date.now() / 1000).toString();
       const encryptedReply = encryptMessage(
