@@ -46,7 +46,7 @@ npm run dev
 1. 将代码推送到 GitHub
 2. 在 [Vercel](https://vercel.com/new) 导入项目
 3. 在 Vercel 项目 Settings → Environment Variables 中添加上述环境变量
-4. 部署完成后，服务器 URL 填写：`https://<你的域名>/api/wechat`
+4. 部署完成后，服务器 URL 填写：`https://wereplay.vercel.app/api/wechat`
 
 ### 5. 微信公众号后台配置
 
@@ -54,7 +54,7 @@ npm run dev
 
 | 配置项 | 值 |
 |--------|-----|
-| URL | `https://<你的域名>/api/wechat` |
+| URL | `https://wereplay.vercel.app/api/wechat` |
 | Token | 与 `WECHAT_TOKEN` 一致 |
 | EncodingAESKey | 与 `WECHAT_ENCODING_AES_KEY` 一致（安全模式） |
 | 消息加解密方式 | 推荐「安全模式」 |

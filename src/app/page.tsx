@@ -17,10 +17,10 @@ export default function Home() {
         <section className="mt-10 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
           <h2 className="text-lg font-medium">服务器地址</h2>
           <p className="mt-2 text-sm leading-7 text-zinc-600">
-            在微信公众号后台填写以下 URL（将域名替换为你的 Vercel 部署地址）：
+            在微信公众号后台填写以下 URL：
           </p>
           <code className="mt-4 block overflow-x-auto rounded-lg bg-zinc-100 px-4 py-3 text-sm">
-            https://your-domain.vercel.app/api/wechat
+            https://wereplay.vercel.app/api/wechat
           </code>
         </section>
 
