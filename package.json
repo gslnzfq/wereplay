@@ -10,6 +10,7 @@
     "url": "https://github.com/gslnzfq/wereplay/issues"
   },
   "homepage": "https://github.com/gslnzfq/wereplay#readme",
+  "packageManager": "pnpm@11.5.1",
   "private": true,
   "scripts": {
     "dev": "next dev",

@@ -15,7 +15,7 @@
 ### 1. 克隆并安装依赖
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 2. 配置环境变量
