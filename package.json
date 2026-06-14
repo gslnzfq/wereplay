@@ -1,6 +1,15 @@
 {
-  "name": "wx-chat",
+  "name": "wereplay",
   "version": "0.1.0",
+  "description": "基于 Next.js 的微信公众号后台，接收用户消息并自动回复，支持 Vercel 部署",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gslnzfq/wereplay.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gslnzfq/wereplay/issues"
+  },
+  "homepage": "https://github.com/gslnzfq/wereplay#readme",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,6 +18,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "fast-xml-parser": "^5.8.0",
     "next": "16.2.9",
     "react": "19.2.4",
     "react-dom": "19.2.4"
