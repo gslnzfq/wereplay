@@ -17,6 +17,7 @@ import {
 } from "@/lib/wechat/xml";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 function getQueryParams(request: NextRequest) {
   const { searchParams } = request.nextUrl;
